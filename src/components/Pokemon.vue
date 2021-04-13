@@ -29,13 +29,23 @@
 import axios from 'axios';
 
     export default {
+        // Presented data should contain at least: id, name, species, color, weight, type and evolution chain.
         created: function(){
             axios.get(this.url).then(res => {
                 this.pokemon.type = res.data.types[0].type.name;    
                 this.pokemon.front = res.data.sprites.front_default;
                 this.pokemon.back = res.data.sprites.back_default;
+                axios.get(res.data.species.url).then(res => {
+                    this.pokemon.captureRate = res.data.capture_rate;
+                    this.pokemon.color = res.data.color;
+                    axios.get(res.data.evolution_chain.url).then(res => {
+                        this.pokemon.evolution = res.data.chain.evolves_to[0].species.name;
+                    }).catch(error => {
+                        console.log(error.response)
+                    });
+                })
+                this.pokemon.weight = res.data.weight;
                 this.currentImg = this.pokemon.front;
-                console.log(this.pokemon);
             })
         },
         data() {
@@ -45,7 +55,11 @@ import axios from 'axios';
                 pokemon: {
                     type: '',
                     front: '',
-                    back: ''
+                    back: '',
+                    captureRate: '',
+                    weight: '',
+                    color: '',
+                    evolution: '',
                 }
             }
         },
