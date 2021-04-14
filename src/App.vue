@@ -1,12 +1,18 @@
 <template>
   <div id="app">
-    <div class="column is-half is-offset-one-quarter">
-      <input class="input is-rounded" type="text" placeholder="Search pokemon by name" v-model="search">
-      <!-- <button id="searchBtn" class="button is-fullwidth is-success">Normal</button> -->
-      <div v-for="(poke,index) in searchResult" :key="index">
-        <Pokemon :name="poke.name" :url="poke.url" :num="index+1"/>
+    <div>
+    <!-- <div class="column is-half is-offset-one-quarter"> -->
+      <div>
+        <b-form-input id="input-small" size="sm" type="text" placeholder="Search pokemon by name" v-model="search"></b-form-input>
+        <div class="mt-2 mb-4">Pokemon: "{{ search }}"</div>
       </div>
-    </div>
+      <b-card-group deck>
+        <!-- <button id="searchBtn" class="button is-fullwidth is-success">Normal</button> -->
+        <div v-for="(poke) in searchResult" :key="poke.url">
+          <Pokemon :name="poke.name" :url="poke.url"/>
+        </div>
+    </b-card-group>
+  </div>
   </div>
 </template>
 
@@ -36,7 +42,8 @@ export default {
       if(this.search == '' || this.search == ''){
         return this.pokemons; 
       }else{
-        return this.pokemons.filter(pokemon => pokemon.name === this.search.toLowerCase());
+        // return this.pokemons.filter(pokemon => pokemon.name === this.search.toLowerCase());
+        return this.pokemons.filter(pokemon => pokemon.name.includes(this.search.toLowerCase()));
       }
     }
   }

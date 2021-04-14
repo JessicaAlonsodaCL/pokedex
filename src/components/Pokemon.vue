@@ -1,26 +1,33 @@
 <template>
     <div id="pokemon">
-        <h1></h1>
-        <div class="card">
-            <div class="card-image">
-                <figure>
-                <img :src="currentImg" alt="Placeholder image">
-                </figure>
-            </div>
-            <div class="card-content">
-                <div class="media">
-                <div class="media-left">
-                </div>
-                <div class="media-content">
-                    <p class="title is-4">{{ num }} {{ name | upper}}</p>
-                    <p class="subtitle is-6"> {{ pokemon.type }} </p>
-                </div>
-                </div>
 
-                <div class="content">
-                    <button class="button is-medium is-fullwidth" @click="changeSprite">Virar Pokemon</button>
+        <div style="width: 12rem;">
+        <b-card 
+            :img-src="img"
+            img-alt="Placeholder image"
+            img-top
+            tag="article"
+            style="max-width: 18rem;"
+            header-variant="img"
+            class=" mb-3"
+        >
+            <b-card-text >
+                        <span id="title">{{ pokemon.id }} {{ name | upper}}</span><br>
+                        <span> {{ pokemon.type }} </span>            
+            </b-card-text>
+
+            <div>
+                <div>
+                    <img src="https://img.icons8.com/fluent/48/000000/pokeball.png" style="width: 2rem" alt="Pokebola image"/> 
+                </div>
+                <div id="colorPokemon">
+                    {{ pokemon.captureRate }}
+                </div>
+                <div>
+                    <b-button id="changeSprite" size="sm" :style= "{ background: pokemon.color } " @click="changeSprite">Turn Pokemon</b-button>
                 </div>
             </div>
+        </b-card>
         </div>
     </div>
 </template>
@@ -35,11 +42,14 @@ import axios from 'axios';
                 this.pokemon.type = res.data.types[0].type.name;    
                 this.pokemon.front = res.data.sprites.front_default;
                 this.pokemon.back = res.data.sprites.back_default;
+                this.pokemon.id = res.data.id;
                 axios.get(res.data.species.url).then(res => {
                     this.pokemon.captureRate = res.data.capture_rate;
-                    this.pokemon.color = res.data.color;
+                    this.pokemon.color = res.data.color.name;
+                    console.log(this.pokemon.color);
                     axios.get(res.data.evolution_chain.url).then(res => {
                         this.pokemon.evolution = res.data.chain.evolves_to[0].species.name;
+                        console.log('evolution', this.pokemon.evolution);
                     }).catch(error => {
                         console.log(error.response)
                     });
@@ -47,6 +57,7 @@ import axios from 'axios';
                 this.pokemon.weight = res.data.weight;
                 this.currentImg = this.pokemon.front;
             })
+   
         },
         data() {
             return {
@@ -56,6 +67,7 @@ import axios from 'axios';
                     type: '',
                     front: '',
                     back: '',
+                    id: '',
                     captureRate: '',
                     weight: '',
                     color: '',
@@ -64,7 +76,6 @@ import axios from 'axios';
             }
         },
         props: {
-            num: Number,
             name: String, 
             url: String
         },
@@ -72,6 +83,11 @@ import axios from 'axios';
             upper: function(value){
                 var newName = value[0].toUpperCase() + value.slice(1);
                 return newName;
+            }
+        },
+        computed: {
+            img(){
+                return this.currentImg;
             }
         },
         methods: {
@@ -91,5 +107,21 @@ import axios from 'axios';
 <style>
 #pokemon{
     margin-top:2%;
+}
+
+#colorPokemon{
+    opacity: 0.4; 
+    color: black;
+    font-weight: bold;
+}
+
+#title{
+    font-weight: bold;
+}
+
+#changeSprite{
+    opacity: 0.7; 
+    color: black;
+    font-weight: bold;
 }
 </style>
