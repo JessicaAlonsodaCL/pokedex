@@ -3,7 +3,7 @@
         <div>
             <b-card 
                 :img-src="img"
-                img-alt="Placeholder image" 
+                img-alt="Pokemon image" 
                 img-top
                 tag="article"
                 style="max-width: 18rem;"
@@ -11,11 +11,12 @@
                 class=" mb-3"
             >
                 <b-card-text id="card-text">
+                            <!-- filter used when displaying the name of the pokemon -->
                             <span id="title">{{ pokemon.id }} {{ name | upper}}</span><br>
                             <div v-for="(type, index) in pokemon.type" :key="index">
                                 <span> {{ type }} </span>   
                             </div>
-                            <div v-on:click="getEvolution(pokemon.url)">
+                            <div v-on:click="emitEvolutionData(pokemon.url)">
                                 <img src="https://img.icons8.com/bubbles/50/000000/info.png" style="width: 2rem" alt="Info Pokemon"/>
                             </div>
                 </b-card-text>
@@ -54,9 +55,11 @@ import axios from 'axios';
 import EventBus from './utils/eventBus'
 
     export default {
+        // method called whenever the component is created inside an html page
         created: function(){
             this.getPokemon();
         },
+        // data() is a function so that each instance can maintain an independent copy of the returned object data.
         data() {
             return {
                 isFront: true,
@@ -75,22 +78,26 @@ import EventBus from './utils/eventBus'
                 }
             }
         },
+        //declared type of props received by data binding
         props: {
             name: String, 
             url: String
         },
+        // function that filters the Pokémon name and changes the first letter in the string to uppercase
         filters: {
             upper: function(value){
                 var newName = value[0].toUpperCase() + value.slice(1);
                 return newName;
             }
         },
+        //computed properties define a property that is used the same way as data , but can also have some custom logic that is cached based on its dependencies.
         computed: {
             img(){
                 return this.currentImg;
             }
         },
         methods: {
+            //changes the pokemon's display image, fonr 
             changeSprite: function() {
                 if(this.isFront){
                     this.isFront = false;
@@ -100,6 +107,7 @@ import EventBus from './utils/eventBus'
                     this.currentImg = this.pokemon.front;
                 }
             },
+            // request pokemon api
             getPokemon: function() {
                 axios.get(this.url).then(res => {
                     this.dataPokemonType = res.data.types;    
@@ -120,8 +128,8 @@ import EventBus from './utils/eventBus'
                     console.log(error.response);
                 })
             },
-
-            getEvolution: function (message) {
+            //emit value for another component to hear
+            emitEvolutionData: function (message) {
                 EventBus.$emit('pokemon', message);
             }
         }

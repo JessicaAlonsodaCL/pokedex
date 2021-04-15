@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div>
+      <!-- used translate i18n-->
       <p>{{ $t('main.welcome', {company: 'Pokedex'}) }}</p>
       <div>
         <b-form-input id="input-small" size="sm" type="text" placeholder="Search pokemon by name" v-model="search"></b-form-input>
@@ -11,6 +12,7 @@
       </div>
       <b-card-group deck>
         <div v-for="poke in searchResult" :key="poke.url">
+          <!-- props passed through data binding -->
           <Pokemon :name="poke.name" :url="poke.url"/>
         </div>
     </b-card-group>
@@ -26,6 +28,7 @@ import EventBus from '../src/components/utils/eventBus'
 
 export default {
   name: 'App',
+  // data() is a function so that each instance can maintain an independent copy of the returned object data.
   data(){
     return{
       pokemons: [],
@@ -39,16 +42,20 @@ export default {
       infoPokemon: false
     }
   },
+  // method called whenever the component is created inside an html page
   created: function(){
     axios.get("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0").then(res => {
       console.log("List of Pokemons");
       this.pokemons = res.data.results;
     })
   },
+  // import components used
   components: {
     Pokemon
   },
+  //computed properties define a property that is used the same way as data , but can also have some custom logic that is cached based on its dependencies.
   computed: {
+    //search Pokemon
     searchResult: function(){
       if(this.search == '' || this.search == ''){
         return this.pokemons; 
@@ -57,7 +64,9 @@ export default {
       }
     }
   },
+  //Called after the instance has just been mounted
   mounted(){
+    //listen to a value to show modal when I receive information (request api) about pokemon
     EventBus.$on('pokemon', (value) => { 
       axios.get(value).then(res => {
           if(this.evolution.firstEvolution !== undefined){
