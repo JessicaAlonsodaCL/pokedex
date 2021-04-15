@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div>
+      <p>{{ $t('main.welcome', {company: 'Pokedex'}) }}</p>
       <div>
         <b-form-input id="input-small" size="sm" type="text" placeholder="Search pokemon by name" v-model="search"></b-form-input>
         <div class="mt-2 mb-4">Pokemon: "{{ search }}"</div>
