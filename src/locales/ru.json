@@ -1,5 +1,8 @@
 {
     "main": {
-        "welcome": "Привет из {company}!"
+        "welcome": "Привет из {company}!",
+        "pokemon": "покемон",
+        "turnPokemon": "превратить покемона",
+        "evolutionChain": "цепочка эволюции"   
     }
   }

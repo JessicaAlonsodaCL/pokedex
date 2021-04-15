@@ -4,9 +4,9 @@
       <p>{{ $t('main.welcome', {company: 'Pokedex'}) }}</p>
       <div>
         <b-form-input id="input-small" size="sm" type="text" placeholder="Search pokemon by name" v-model="search"></b-form-input>
-        <div class="mt-2 mb-4">Pokemon: "{{ search }}"</div>
+        <div class="mt-2 mb-4"> {{ $t('main.pokemon')}} "{{ search }}"</div>
         <div v-if="this.infoPokemon">
-          <b-modal v-model="infoPokemon">Cadeia de Evolução: {{ evolution.firstEvolution }} {{ evolution.secondEvolution }} {{ evolution.thirdEvolution }} </b-modal>
+          <b-modal v-model="infoPokemon">{{ $t('main.evolutionChain')}} {{ evolution.firstEvolution }} {{ evolution.secondEvolution }} {{ evolution.thirdEvolution }} </b-modal>
         </div>
       </div>
       <b-card-group deck>
@@ -41,7 +41,7 @@ export default {
   },
   created: function(){
     axios.get("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0").then(res => {
-      console.log("Lista de Pokemons");
+      console.log("List of Pokemons");
       this.pokemons = res.data.results;
     })
   },

@@ -41,7 +41,7 @@
                     <div>
                     </div>
                     <div class="row">
-                            <b-button id="changeSprite" size="sm" :style= "{ background: pokemon.color } " @click="changeSprite">Turn Pokemon</b-button>
+                            <b-button id="changeSprite" size="sm" :style= "{ background: pokemon.color } " @click="changeSprite">{{ $t('main.turnPokemon')}}</b-button>
                     </div>
                 </div>
             </b-card>
@@ -102,7 +102,6 @@ import EventBus from './utils/eventBus'
             },
             getPokemon: function() {
                 axios.get(this.url).then(res => {
-                    // console.log(res.data.types);
                     this.dataPokemonType = res.data.types;    
                     this.dataPokemonType.map(data => {
                         this.pokemon.type.push(data.type.name);
